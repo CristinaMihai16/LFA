@@ -1,11 +1,14 @@
-import { AbstractComponent } from './AbstractComponent.ts';
+import { CustomElement } from './CustomElement.ts';
 import { html } from '../helpers/dom.ts';
 
 /**
  * The top level layout class that handles creating the application basic elements
  * Also, it returns access to these elements
  */
-export class AppLayout extends AbstractComponent {
+export class AppLayout extends CustomElement {
+    // the name of the element bound to this component
+    static element: string = 'app-layout';
+
     // returns access to the hamburger component
     get hamburgerMenu(): HTMLElement {
         return this.getChild('.top-hamburger');
@@ -55,5 +58,3 @@ export class AppLayout extends AbstractComponent {
         return <HTMLElement>container;
     }
 }
-
-AppLayout.register('app-layout', AppLayout);
