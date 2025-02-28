@@ -1,4 +1,4 @@
-# ACE Automata
+# ACAT - ACE Computational Automata Tool
 
 This is work in progress and this readme will be updated when the time comes.
 

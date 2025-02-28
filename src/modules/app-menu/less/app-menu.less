@@ -1,0 +1,50 @@
+// the menu bar container styling
+.menu-bar {
+  background: var(--body-background);
+  box-shadow: var(--menu-shadow);
+  z-index: 1001;
+  opacity: 100;
+  padding: 5px;
+  display: flex;
+  gap: 20px;
+  position: relative;
+
+  // menu entry styling
+  .menu-item {
+    position: relative;
+    padding: 5px 15px;
+    cursor: pointer;
+    user-select: none;
+
+    // hover styling and display of sub-items
+    &:hover {
+      background-color: var(--hover-buttons);
+
+      .dropdown {
+        display: block;
+      }
+    }
+
+    // dropdown styling
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: var(--body-background);
+      box-shadow: var(--menu-shadow);
+      border: 1px solid var(--hover-buttons);
+      min-width: 150px;
+      z-index: 1000;
+
+      .sub-item {
+        padding: 8px 15px;
+        white-space: nowrap;
+      }
+
+      .sub-item:hover {
+        background-color: var(--hover-buttons);
+      }
+    }
+  }
+}

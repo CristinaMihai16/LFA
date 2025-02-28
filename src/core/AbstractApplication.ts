@@ -8,7 +8,7 @@ export class AbstractApplication implements Application {
     /**
      * The constructor receives the root element in which it should render its components
      */
-    constructor(private root: HTMLElement) {
+    constructor(protected root: HTMLElement) {
         // doing nothing as the root property is already stored on this instances
     }
 

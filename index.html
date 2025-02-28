@@ -3,13 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Automata Simulator</title>
+    <title>Automata simula</title>
     <script type="module" src="/index.ts"></script>
-    <link rel="stylesheet" href="/src/assets/less/style.less">
 </head>
 <body>
-<h1>Finite Automaton Simulation</h1>
-<div id="network"></div>
-<button id="simulate">Simulate "abc"</button>
+    <div class="menu-bar">
+        <!-- File Menu -->
+        <div class="menu-item">
+            File
+            <div class="dropdown">
+                <div class="sub-item">Save</div>
+                <div class="sub-item">Load</div>
+                <div class="sub-item">Export</div>
+            </div>
+        </div>
+
+        <!-- Edit Menu -->
+        <div class="menu-item">
+            Edit
+            <div class="dropdown">
+                <div class="sub-item">
+                    Redo
+                </div>
+                <div class="sub-item">
+                    Undo
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Menu -->
+        <div class="menu-item">
+            Help
+            <div class="dropdown">
+                <div class="sub-item">About ACAT</div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
