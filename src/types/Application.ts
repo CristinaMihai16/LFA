@@ -1,4 +1,5 @@
 import { AppModules, ModuleName } from '../AppModules.ts';
+import { AppLayout } from '../core/AppLayout.ts';
 
 /**
  * Describes the application interface that exposes its API to the public.
@@ -16,4 +17,9 @@ export interface Application {
      * Runs the application
      */
     run(): void;
+
+    /**
+     * Returns access to the main layout UI component
+     */
+    getLayout(): AppLayout;
 }

@@ -1,8 +1,8 @@
 import './less/app-menu.less';
 
-import { Module } from '../../types/Module.ts';
-import { ModuleNames } from '../../AppModules.ts';
-import { Application } from '../../types/Application.ts';
+import { Module } from '../../../types/Module.ts';
+import { ModuleNames } from '../../../AppModules.ts';
+import { Application } from '../../../types/Application.ts';
 
 /**
  * Module that handles rendering the application menu

@@ -20,4 +20,9 @@ body {
   line-height: 1.42857143;
   margin: 0;
   padding: 0;
+
+  // making all custom elements inside body as display flex
+  *:defined:not(style):not(link):not(script) {
+    display: flex;
+  }
 }

@@ -1,5 +1,6 @@
-import { AppMenu } from './modules/app-menu/AppMenu.ts';
-import { ContextMenu } from './modules/context-menu/ContextMenu.ts';
+import { AppMenu } from './modules/menu/app-menu/AppMenu.ts';
+import { ContextMenu } from './modules/menu/context-menu/ContextMenu.ts';
+import { HamburgerMenu } from './modules/menu/hamburger-menu/HamburgerMenu.ts';
 
 /**
  * Constant that hold the names of the modules
@@ -7,12 +8,14 @@ import { ContextMenu } from './modules/context-menu/ContextMenu.ts';
 export const ModuleNames = {
     AppMenu: 'app-menu',
     ContextMenu: 'context-menu',
+    HamburgerMenu: 'hamburger-menu',
 } as const;
 
 /**
  * Holds the list of all the modules this application loads
  */
 export const AppModules = {
+    [ModuleNames.HamburgerMenu]: HamburgerMenu,
     [ModuleNames.AppMenu]: AppMenu,
     [ModuleNames.ContextMenu]: ContextMenu,
 } as const;

@@ -1,6 +1,36 @@
 import { AbstractApplication } from './core/AbstractApplication.ts';
+import { AppModules, ModuleName } from './AppModules.ts';
+import { AppLayout } from './core/AppLayout.ts';
 
 /**
  * The Simulator application that implements the Application interface
  */
-export class Simulator extends AbstractApplication {}
+export class Simulator extends AbstractApplication {
+    /**
+     * Constructor receives the root element of the application and instantiates the modules
+     */
+    constructor(root: HTMLElement) {
+        // calling super for passing over the root element
+        super(root);
+
+        // instantiating the registered modules
+        const names = Object.keys(AppModules) as Array<ModuleName>;
+        for (let i = 0, len = names.length; i < len; i++) {
+            this.modules.set(names[i], new AppModules[names[i]]());
+        }
+    }
+
+    /**
+     * Runs the simulator application
+     */
+    run() {
+        // creating the application layout
+        const layout = new AppLayout(() => console.log('App clicked'));
+        this.root.appendChild(layout);
+
+        // initializing all modules
+        for (const [, module] of this.modules) {
+            module.initialize(this);
+        }
+    }
+}
