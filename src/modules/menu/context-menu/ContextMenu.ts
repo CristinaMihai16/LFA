@@ -1,6 +1,10 @@
 import { Module } from '../../../types/Module.ts';
 import { Application } from '../../../types/Application.ts';
-import { DefaultContext } from './views/DefaultContext.ts';
+import { DefaultToolbar } from './DefaultToolbar.ts';
+import { PlayButton } from './buttons/PlayButton.ts';
+import { PauseButton } from './buttons/PauseButton.ts';
+import { RefreshButton } from './buttons/RefreshButton.ts';
+import { removeAllChildren } from '../../../helpers/dom.ts';
 
 /**
  * The context menu module that handles updating the context items when a automata component is selected
@@ -14,6 +18,25 @@ export class ContextMenu implements Module {
      */
     initialize(app: Application): void {
         this.app = app;
-        this.app.getLayout().contextMenu.appendChild(new DefaultContext());
+        this.app.getLayout().contextMenu.appendChild(
+            new DefaultToolbar({
+                buttons: [
+                    new PlayButton(() => console.log('Play button clicked')),
+                    new PauseButton(() => console.log('Pause button clicked')),
+                    new RefreshButton(() => console.log('Refresh button clicked')),
+                ],
+            }),
+        );
+    }
+
+    /**
+     * Called for refreshing the context menu toolbar when a new automata was selected
+     */
+    refreshToolbar(newToolbar: DefaultToolbar) {
+        const container = this.app?.getLayout().contextMenu;
+        if (container) {
+            removeAllChildren(container);
+            container.appendChild(newToolbar);
+        }
     }
 }

@@ -38,7 +38,7 @@ export class AppLayout extends CustomElement {
      * The template for the application layout
      */
     template() {
-        return html`<div class="top-toolbar">
+        return html`<div class="top-navigation">
                 <div class="top-hamburger"></div>
                 <div class="top-logo"></div>
                 <div class="top-menu">

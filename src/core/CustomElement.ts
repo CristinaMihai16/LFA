@@ -21,8 +21,9 @@ export abstract class CustomElement<T extends Record<string, any> = {}> extends 
         // calling parent
         super();
 
-        // loading the template
-        this.innerHTML = this.template();
+        // loading the template content if it is not null because the method can either return a string or update its children
+        const template = this.template();
+        template && (this.innerHTML = template);
     }
 
     /**
@@ -44,5 +45,5 @@ export abstract class CustomElement<T extends Record<string, any> = {}> extends 
     /**
      * Returns the template for this element
      */
-    abstract template(): string;
+    abstract template(): string | null;
 }
