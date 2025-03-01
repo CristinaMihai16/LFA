@@ -12,13 +12,6 @@ export class AppMenu implements Module {
     protected app: Application | null = null;
 
     /**
-     * Returns the name of this module
-     */
-    getName(): string {
-        return ModuleNames.AppMenu;
-    }
-
-    /**
      * Initializes the current module
      */
     initialize(app: Application) {

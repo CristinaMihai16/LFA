@@ -8,6 +8,14 @@
 
     // shadows
     --menu-shadow: 0 8px 11px -6px rgba(0, 0, 0, 0.12);
+
+    // actions
+    --active-opacity: .6;
+}
+
+html {
+  width: 100%;
+  height: 100%;
 }
 
 body {
@@ -21,8 +29,36 @@ body {
   margin: 0;
   padding: 0;
 
+  // body dimensions
+  width: 100%;
+  height: 100%;
+
   // making all custom elements inside body as display flex
   *:defined:not(style):not(link):not(script) {
     display: flex;
+    box-sizing: border-box;
+  }
+
+  div {
+    box-sizing: border-box;
+  }
+
+  app-layout {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    .top-toolbar {
+      display: flex;
+      align-items: center;
+      column-gap: 5px;
+    }
+
+    .app-body {
+      display: flex;
+      flex: 1;
+    }
   }
 }

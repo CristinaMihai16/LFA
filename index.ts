@@ -1,6 +1,6 @@
 // @ts-ignore
 import './src/assets/less/style.less';
-import { Simulator } from './src/Simulator';
+import { App } from './src/App';
 
-const simulator = new Simulator(document.body);
+const simulator = new App(document.body);
 simulator.run();

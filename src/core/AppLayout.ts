@@ -19,24 +19,21 @@ export class AppLayout extends CustomElement {
         return this.getChild('.top-top-menu');
     }
 
+    // returns access to the logo component
+    get logo(): HTMLElement {
+        return this.getChild('.top-logo');
+    }
+
     // returns access to the application's body
     get appBody(): HTMLElement {
         return this.getChild('.app-body');
     }
 
-    constructor(public onclick: VoidFunction) {
-        super();
-        console.log('Created the layout component');
-    }
-
     /**
-     * Creating the base containers inside the application after the component
-     * has been connected to the DOM
+     * The template for the application layout
      */
-    connectedCallback() {
-        console.log('Layout connected');
-
-        this.innerHTML = html`<div class="top-toolbar">
+    template() {
+        return html`<div class="top-toolbar">
                 <div class="top-hamburger"></div>
                 <div class="top-logo"></div>
                 <div class="top-menu"></div>

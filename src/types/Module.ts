@@ -6,11 +6,6 @@ import { Application } from './Application.ts';
  */
 export interface Module {
     /**
-     * Returns the name of the module
-     */
-    getName(): string;
-
-    /**
      * Called by the application when the module needs to initialize
      * This is done after constructing the module and setting its configuration or state
      * It receives access to the application instance for interacting with other modules

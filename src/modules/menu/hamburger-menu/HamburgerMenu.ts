@@ -1,5 +1,6 @@
 import { Module } from '../../../types/Module.ts';
 import { Application } from '../../../types/Application.ts';
+import { HamburgerIcon } from './views/HamburgerIcon.ts';
 
 /**
  * This class handles the hamburger menu implementation
@@ -7,17 +8,22 @@ import { Application } from '../../../types/Application.ts';
  * available in this simulator
  */
 export class HamburgerMenu implements Module {
-    /**
-     * Returns the name of this module
-     */
-    getName(): string {
-        return '';
-    }
+    // references the application
+    protected app: Application | null = null;
 
     /**
      * Initializes the current menu
      */
     initialize(app: Application): void {
-        // @todo implement it
+        this.app = app;
+        // adding the hamburger icon to the hamburger menu
+        app.getLayout().hamburgerMenu.appendChild(new HamburgerIcon(this.onToggleMenu));
     }
+
+    /**
+     * Handler for opening the drawer menu
+     */
+    private onToggleMenu = () => {
+        console.log('Toggling menu');
+    };
 }

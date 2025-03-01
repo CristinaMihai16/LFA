@@ -1,14 +1,16 @@
 import { AppMenu } from './modules/menu/app-menu/AppMenu.ts';
 import { ContextMenu } from './modules/menu/context-menu/ContextMenu.ts';
 import { HamburgerMenu } from './modules/menu/hamburger-menu/HamburgerMenu.ts';
+import { AppLogo } from './modules/menu/app-logo/AppLogo.ts';
 
 /**
  * Constant that hold the names of the modules
  */
 export const ModuleNames = {
     AppMenu: 'app-menu',
-    ContextMenu: 'context-menu',
     HamburgerMenu: 'hamburger-menu',
+    AppLogo: 'app-logo',
+    ContextMenu: 'context-menu',
 } as const;
 
 /**
@@ -16,6 +18,7 @@ export const ModuleNames = {
  */
 export const AppModules = {
     [ModuleNames.HamburgerMenu]: HamburgerMenu,
+    [ModuleNames.AppLogo]: AppLogo,
     [ModuleNames.AppMenu]: AppMenu,
     [ModuleNames.ContextMenu]: ContextMenu,
 } as const;

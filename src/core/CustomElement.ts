@@ -14,12 +14,16 @@ export abstract class CustomElement extends HTMLElement {
     /**
      * The constructor of this component which ensures it is registered in the customElements registry before being used
      */
-    protected constructor() {
+    constructor() {
         // declaring the custom component as type of this component
         const CustomComponent = new.target as unknown as CustomElementConstructor & { element: string };
         CustomElement.registerComponent(CustomComponent);
 
+        // calling parent
         super();
+
+        // loading the template
+        this.innerHTML = this.template();
     }
 
     /**
@@ -37,4 +41,9 @@ export abstract class CustomElement extends HTMLElement {
             customElements.define(name, CustomComponent);
         }
     }
+
+    /**
+     * Returns the template for this element
+     */
+    abstract template(): string;
 }
