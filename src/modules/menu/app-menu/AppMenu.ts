@@ -27,7 +27,7 @@ export class AppMenu implements Module {
         menuBar.addGroup(this.getEditMenuGroup());
         menuBar.addGroup(this.getHelpMenuGroup());
 
-        this.app.getLayout().topMenu.appendChild(menuBar);
+        this.app.getLayout().appMenu.appendChild(menuBar);
     }
 
     /**

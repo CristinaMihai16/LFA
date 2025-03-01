@@ -9,6 +9,9 @@
     // shadows
     --menu-shadow: 0 8px 11px -6px rgba(0, 0, 0, 0.12);
 
+    // borders
+    --sepparator: 1px solid rgb(196, 196, 196);
+
     // actions
     --active-opacity: .6;
 }
@@ -56,6 +59,22 @@ body {
       column-gap: 5px;
       background: var(--body-background);
       box-shadow: var(--menu-shadow);
+
+      .top-menu {
+        display: flex;
+        flex: 1;
+        align-items: center;
+
+        .top-app-menu {
+          display: flex;
+          flex: 1;
+        }
+
+        .top-ctx-menu {
+          display: flex;
+          padding-right: 20px;
+        }
+      }
     }
 
     .app-body {

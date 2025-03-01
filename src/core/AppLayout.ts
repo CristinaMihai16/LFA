@@ -15,8 +15,13 @@ export class AppLayout extends CustomElement {
     }
 
     // returns access to the top menu component
-    get topMenu(): HTMLElement {
-        return this.getChild('.top-top-menu');
+    get appMenu(): HTMLElement {
+        return this.getChild('.top-app-menu');
+    }
+
+    // returns access to the top menu component
+    get contextMenu(): HTMLElement {
+        return this.getChild('.top-ctx-menu');
     }
 
     // returns access to the logo component
@@ -37,7 +42,7 @@ export class AppLayout extends CustomElement {
                 <div class="top-hamburger"></div>
                 <div class="top-logo"></div>
                 <div class="top-menu">
-                    <div class="top-top-menu"></div>
+                    <div class="top-app-menu"></div>
                     <div class="top-ctx-menu"></div>
                 </div>
             </div>
