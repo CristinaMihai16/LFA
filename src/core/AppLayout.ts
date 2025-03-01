@@ -36,7 +36,10 @@ export class AppLayout extends CustomElement {
         return html`<div class="top-toolbar">
                 <div class="top-hamburger"></div>
                 <div class="top-logo"></div>
-                <div class="top-menu"></div>
+                <div class="top-menu">
+                    <div class="top-top-menu"></div>
+                    <div class="top-ctx-menu"></div>
+                </div>
             </div>
             <div class="app-body"></div>`;
     }

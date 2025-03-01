@@ -8,13 +8,12 @@ interface CustomElementConstructor {
 /**
  * This is the class that handles rendering the layout
  */
-export abstract class CustomElement extends HTMLElement {
+export abstract class CustomElement<T extends Record<string, any> = {}> extends HTMLElement {
+    // override this name with the correct name of the element
     static element: string = 'missing-name';
 
-    /**
-     * The constructor of this component which ensures it is registered in the customElements registry before being used
-     */
-    constructor() {
+    // @ts-ignore The constructor of this component which ensures it is registered in the customElements registry before being used
+    constructor(protected props: T = {}) {
         // declaring the custom component as type of this component
         const CustomComponent = new.target as unknown as CustomElementConstructor & { element: string };
         CustomElement.registerComponent(CustomComponent);

@@ -34,7 +34,7 @@ body {
   height: 100%;
 
   // making all custom elements inside body as display flex
-  *:defined:not(style):not(link):not(script) {
+  *:defined:not(style):not(link):not(script):not(:where(div, span, p)) {
     display: flex;
     box-sizing: border-box;
   }
@@ -54,6 +54,8 @@ body {
       display: flex;
       align-items: center;
       column-gap: 5px;
+      background: var(--body-background);
+      box-shadow: var(--menu-shadow);
     }
 
     .app-body {
