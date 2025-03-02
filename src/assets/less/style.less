@@ -8,12 +8,17 @@
 
     // shadows
     --menu-shadow: 0 8px 11px -6px rgba(0, 0, 0, 0.12);
+    --drawer-shadow: 4px 8px 8px 0 rgba(0, 0, 0, 0.12);
 
     // borders
-    --sepparator: 1px solid rgb(196, 196, 196);
+    --sepparator: solid 1px #ddd;
 
     // actions
     --active-opacity: .6;
+
+    // the body font size
+    --body-font: normal 400 14px "Roboto", sans-serif;
+    --category-font: normal 600 16px "Roboto", sans-serif;
 }
 
 html {
@@ -22,13 +27,7 @@ html {
 }
 
 body {
-  font-family: "Roboto", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  font-variation-settings: "wdth" 400;
-  font-size: 14px;
-  line-height: 1.42857143;
+  font: var(--body-font);
   margin: 0;
   padding: 0;
 
@@ -78,6 +77,8 @@ body {
     }
 
     .app-body {
+      // relative position for absolute elements
+      position: relative;
       display: flex;
       flex: 1;
     }

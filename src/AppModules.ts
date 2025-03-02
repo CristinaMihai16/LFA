@@ -2,6 +2,7 @@ import { AppMenu } from './modules/menu/app-menu/AppMenu.ts';
 import { ContextMenu } from './modules/menu/context-menu/ContextMenu.ts';
 import { HamburgerMenu } from './modules/menu/hamburger-menu/HamburgerMenu.ts';
 import { AppLogo } from './modules/menu/app-logo/AppLogo.ts';
+import { DeterministicFiniteAutomata } from './modules/automata/finite-automata/DeterministicFiniteAutomata.ts';
 
 /**
  * Constant that hold the names of the modules
@@ -11,6 +12,7 @@ export const ModuleNames = {
     HamburgerMenu: 'hamburger-menu',
     AppLogo: 'app-logo',
     ContextMenu: 'context-menu',
+    DeterministicFiniteAutomata: 'automata-dfa',
 } as const;
 
 /**
@@ -21,6 +23,7 @@ export const AppModules = {
     [ModuleNames.AppLogo]: AppLogo,
     [ModuleNames.AppMenu]: AppMenu,
     [ModuleNames.ContextMenu]: ContextMenu,
+    [ModuleNames.DeterministicFiniteAutomata]: DeterministicFiniteAutomata,
 } as const;
 
 /**
