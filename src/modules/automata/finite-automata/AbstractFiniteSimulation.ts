@@ -8,7 +8,7 @@ import { DotsIcon } from '../../menu/hamburger-menu/icons/DotsIcon.ts';
 /**
  * Handles doing the basic stuff for the finite automata simulations
  */
-export abstract class AbstractFiniteAutomata implements Simulation {
+export abstract class AbstractFiniteSimulation implements Simulation {
     // holds the identifier of the category to which the available simulations will be added
     static menuId: string = 'finite-automata';
 
@@ -36,9 +36,9 @@ export abstract class AbstractFiniteAutomata implements Simulation {
      * Ensures the category for finite automata exists inside the hamburger menu
      */
     protected ensureCategoryExists(menu: HamburgerMenu) {
-        const category = menu.getCategory(AbstractFiniteAutomata.menuId);
+        const category = menu.getCategory(AbstractFiniteSimulation.menuId);
         if (category === null) {
-            menu.addCategory(new DrawerCategory({ id: AbstractFiniteAutomata.menuId, displayName: 'Finite Automata', icon: new DotsIcon() }));
+            menu.addCategory(new DrawerCategory({ id: AbstractFiniteSimulation.menuId, displayName: 'Finite Automata', icon: new DotsIcon() }));
         }
     }
 }
