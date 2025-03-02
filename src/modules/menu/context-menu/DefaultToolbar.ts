@@ -1,6 +1,7 @@
 import './less/default-toolbar.less';
 
 import { CustomElement } from '../../../core/CustomElement.ts';
+import { AbstractButton } from './buttons/AbstractButton.ts';
 
 /**
  * The properties for creating the default toolbar
@@ -25,6 +26,19 @@ export class DefaultToolbar extends CustomElement<DefaultToolbarProps> {
      */
     template(): null {
         this.props.buttons.forEach((button: CustomElement) => this.appendChild(button));
+        return null;
+    }
+
+    /**
+     * Iterates through the list of buttons and returns the first found that has the same instance as the given constructor
+     */
+    getButton(Instance: typeof AbstractButton): AbstractButton | null {
+        for (let i = 0, len = this.children.length; i < len; i++) {
+            if (this.children[i] instanceof AbstractButton) {
+                return <AbstractButton>this.children[i];
+            }
+        }
+
         return null;
     }
 }

@@ -6,6 +6,7 @@ import { PauseButton } from '../../../menu/context-menu/buttons/PauseButton.ts';
 import { RefreshButton } from '../../../menu/context-menu/buttons/RefreshButton.ts';
 import { PlusButton } from '../../../menu/context-menu/buttons/PlusButton.ts';
 import { DFASimulator } from './DFASimulator.ts';
+import { DFAMainView } from './views/DFAMainView.ts';
 
 /**
  * The DFA automata implementation which acts as a gateway between the simulator
@@ -26,12 +27,7 @@ export class DFAAutomata implements Automata {
      */
     constructor() {
         this.toolbar = new DefaultToolbar({
-            buttons: [
-                new PlusButton(this.simulator.onCreateNode),
-                new PlayButton(this.simulator.onPlaySimulation),
-                new PauseButton(this.simulator.onPauseSimulation),
-                new RefreshButton(this.onRefreshSimulation),
-            ],
+            buttons: [new PlayButton(this.simulator.onPlaySimulation), new PauseButton(this.simulator.onPauseSimulation), new RefreshButton(this.onRefreshSimulation)],
         });
     }
 
@@ -47,7 +43,11 @@ export class DFAAutomata implements Automata {
      */
     runSimulation(app: Application): void {
         this.app = app;
-        this.simulator.start();
+
+        // adding the main view to the body
+        const container = new DFAMainView();
+        this.app.getLayout().appBody.appendChild(container);
+        this.simulator.start(container);
     }
 
     /**

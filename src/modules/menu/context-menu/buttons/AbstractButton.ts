@@ -12,4 +12,18 @@ export abstract class AbstractButton extends CustomElement {
         // appending the ctx-btn class for styling
         this.classList.add('ctx-btn');
     }
+
+    /**
+     * Marks this button as selected
+     */
+    select() {
+        this.classList.add('selected');
+    }
+
+    /**
+     * Marks this button as not selected
+     */
+    unselect() {
+        this.classList.remove('selected');
+    }
 }

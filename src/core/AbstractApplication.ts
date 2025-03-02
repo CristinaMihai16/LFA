@@ -2,6 +2,7 @@ import { AppModule, AppModules, ModuleName, ModuleNames } from '../AppModules.ts
 import { Application } from '../types/Application.ts';
 import { AppLayout } from './AppLayout.ts';
 import { Automata } from '../types/Automata.ts';
+import { DrawerMenu } from '../modules/menu/hamburger-menu/views/DrawerMenu.ts';
 
 /**
  * This is the abstract application implementation that shadows a lot of under the hood logic
@@ -51,9 +52,27 @@ export class AbstractApplication implements Application {
      * Simulates the selected automata
      */
     simulateAutomata(automata: Automata) {
+        // clearing the previous simulation
+        this.clearBodyContent();
+
         this.activeAutomata = automata;
         // updating the context menu with the new buttons
         this.getModule(ModuleNames.ContextMenu)?.refreshToolbar(automata.getContextBar());
         this.activeAutomata.runSimulation(this);
+    }
+
+    /**
+     * Emptying the body content but keeping the drawer menu
+     */
+    protected clearBodyContent() {
+        const body = this.getLayout().appBody;
+        for (let i = 0, len = body.children.length; i < len; i++) {
+            // sipping deleting the drawer menu
+            if (body.children[i] instanceof DrawerMenu) {
+                continue;
+            }
+            // removing the child
+            body.children[i].remove();
+        }
     }
 }
