@@ -1,6 +1,7 @@
-import { AppModule, AppModules, ModuleName } from '../AppModules.ts';
+import { AppModule, AppModules, ModuleName, ModuleNames } from '../AppModules.ts';
 import { Application } from '../types/Application.ts';
 import { AppLayout } from './AppLayout.ts';
+import { Automata } from '../types/Automata.ts';
 
 /**
  * This is the abstract application implementation that shadows a lot of under the hood logic
@@ -12,6 +13,9 @@ export class AbstractApplication implements Application {
 
     // returns access to the layout UI component
     protected layout: AppLayout | null = null;
+
+    // references the running automata
+    protected activeAutomata: Automata | null = null;
 
     /**
      * The constructor receives the root element in which it should render its components
@@ -41,5 +45,15 @@ export class AbstractApplication implements Application {
         if (this.layout === null) throw new Error('Layout needs to be created before it can be accessed.');
 
         return this.layout;
+    }
+
+    /**
+     * Simulates the selected automata
+     */
+    simulateAutomata(automata: Automata) {
+        this.activeAutomata = automata;
+        // updating the context menu with the new buttons
+        this.getModule(ModuleNames.ContextMenu)?.refreshToolbar(automata.getContextBar());
+        this.activeAutomata.runSimulation(this);
     }
 }

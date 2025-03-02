@@ -1,5 +1,6 @@
 import { AppModules, ModuleName } from '../AppModules.ts';
 import { AppLayout } from '../core/AppLayout.ts';
+import { Automata } from './Automata.ts';
 
 /**
  * Describes the application interface that exposes its API to the public.
@@ -22,4 +23,9 @@ export interface Application {
      * Returns access to the main layout UI component
      */
     getLayout(): AppLayout;
+
+    /**
+     * Starts the simulation for the given automata
+     */
+    simulateAutomata(automata: Automata): void;
 }
