@@ -4,13 +4,13 @@ import { DefaultToolbar } from '../../../menu/context-menu/DefaultToolbar.ts';
 import { PlayButton } from '../../../menu/context-menu/buttons/PlayButton.ts';
 import { PauseButton } from '../../../menu/context-menu/buttons/PauseButton.ts';
 import { RefreshButton } from '../../../menu/context-menu/buttons/RefreshButton.ts';
-import { PlusButton } from '../../../menu/context-menu/buttons/PlusButton.ts';
 import { DFASimulator } from './DFASimulator.ts';
 import { DFAMainView } from './views/DFAMainView.ts';
 
 /**
- * The DFA automata implementation which acts as a gateway between the simulator
- * and the application
+ * The DFA automata implementation which acts as a gateway between the simulator and the application
+ * It handles returning the current configuration, updating the application context bar
+ * and starting the simulation
  */
 export class DFAAutomata implements Automata {
     // references the current application

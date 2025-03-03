@@ -1,28 +1,20 @@
 import { Network, DataSet, Node, Edge } from 'vis-network/standalone';
 import { DFAAutomata } from './DFAAutomata.ts';
 import { DFAMainView } from './views/DFAMainView.ts';
+import { DFAModel, State } from './DFAModel.ts';
 
 /**
  * Does the actual simulation of the Deterministic Finite Automata
  */
 export class DFASimulator {
-    // counts the number of states of this automata
-    protected statesCounter = 0;
-
     // the simulator view
     protected mainView: DFAMainView | null = null;
-
-    // holds the list of nodes
-    protected nodes: Array<Node> = [{ id: this.statesCounter, label: 'q' + this.statesCounter + ' (Start)', shape: 'ellipse', color: 'lightgreen' }];
-
-    // holds the list of transitions. the accepting character is saved on the label
-    protected edges: Array<Edge> = [];
 
     // references the network of states
     protected network: Network | null = null;
 
-    // references the current state in the simulation
-    protected currentState: number = 0;
+    // references the DFAModel
+    protected model: DFAModel = new DFAModel();
 
     // @ts-ignore
     protected currentTimeout: NodeJS.Timeout;
@@ -36,10 +28,13 @@ export class DFASimulator {
      * Entry point for starting the simulation
      */
     start(mainView: DFAMainView) {
+        // initializing the DFA model
+        this.model.states.push({ name: 'q0', initial: true, final: false });
+
         // keeping track of the container
         this.mainView = mainView;
         // creating the network of states
-        const { nodes, edges } = this;
+        const [nodes, edges] = [this.getNodes(), this.getEdges()];
         // setting up some display options for how to render the network
         const options = { physics: false, edges: { font: { align: 'top' } } };
         // instantiating the network of states
@@ -82,7 +77,7 @@ export class DFASimulator {
         this.mainView?.logMessage('Starting simulation for the following input: ' + input, 'success');
 
         // showing the start state
-        this.highlightStateAndEdge(0);
+        this.highlightStateAndEdge(this.model.getInitialState());
 
         // letting the first state shine for a second
         this.currentTimeout = setTimeout(async () => {
@@ -95,15 +90,15 @@ export class DFASimulator {
 
                 // it found no state to move forward
                 if (nextState === -1) {
-                    this.network?.updateClusteredNode(this.currentState, { color: 'palevioletred' });
+                    this.network?.updateClusteredNode(this.model.states[this.model.currentState].name, { color: 'palevioletred' });
                     break;
                 }
 
-                this.currentState = nextState;
+                this.model.currentState = nextState;
             }
 
             // checking if we reached the final state
-            if (this.currentState === this.nodes.length - 1) {
+            if (this.model.states[this.model.currentState].final) {
                 // letting the user know that the input sequence was successfully received
                 this.mainView?.logMessage('Input accepted: ' + input, 'success');
             } else {
@@ -122,7 +117,7 @@ export class DFASimulator {
         // stopping the next timeout function if exists
         clearTimeout(this.currentTimeout);
         // resetting the state to the initial value
-        this.currentState = 0;
+        this.model.currentState = this.model.states.indexOf(this.model.getInitialState());
         // updating colors
         this.resetNodesColors();
     };
@@ -132,16 +127,14 @@ export class DFASimulator {
      */
     protected nodeAdded = (nodeData: Node, callback: (arg: Node) => void) => {
         const newNode = { x: nodeData.x, y: nodeData.y, ...this.getNextStateData() };
-        this.nodes.push(newNode);
-
         callback(newNode);
 
         // if there are more than two nodes (Initial and Final state) we update the intermediary ones
-        if (this.nodes.length > 2) {
+        // @todo this logic needs to be updated because a DFA can have one initial state and multiple final states
+        if (this.model.states.length > 2) {
             // updating the last node because it is no longer final
-            const previousNode = this.nodes[this.nodes.length - 2];
-            previousNode.label = 'q' + previousNode.id;
-            previousNode.color = 'lightblue';
+            const previous = this.model.states[this.model.states.length - 2];
+            const previousNode: Node = { id: previous.name, label: previous.name, color: 'lightblue' };
 
             // keep in mind that these nodes get updated when the user drags them on the canvas
             this.network?.updateClusteredNode(previousNode.id!, { label: previousNode.label, color: previousNode.color });
@@ -161,8 +154,10 @@ export class DFASimulator {
                 return;
             }
 
+            // @ts-ignore
+            this.model.transitions.push({ from: edgeData.from, to: edgeData.to, character });
+
             edgeData.label = character;
-            this.edges.push(edgeData);
             callback(edgeData);
         } else {
             alert('Self-loops are not allowed!');
@@ -173,7 +168,9 @@ export class DFASimulator {
      * Returns a new node definition
      */
     protected getNextStateData(): Node {
-        return { id: ++this.statesCounter, label: 'q' + this.statesCounter + ' (Final)', shape: 'ellipse', color: 'lightgreen' };
+        const nextState: State = { name: 'q' + this.model.states.length, final: true, initial: false };
+        this.model.states.push(nextState);
+        return { id: nextState.name, label: nextState.name + ' (Final)', shape: 'ellipse', color: 'lightgreen' };
     }
 
     /**
@@ -185,13 +182,16 @@ export class DFASimulator {
             // we consider by default that the input character is invalid
             let nextState: number = -1;
 
-            for (let i = 0, len = this.edges.length; i < len; i++) {
-                const edge = this.edges[i];
+            const currentState = this.model.getCurrentState();
+            for (let i = 0, len = this.model.transitions.length; i < len; i++) {
+                const transition = this.model.transitions[i];
+                const possibleState = this.model.states[this.model.currentState];
                 // checking if this edge starts from current state and leads to a new state when reading the input character
-                if (Number(edge.from) === this.currentState && edge.label === char) {
+                if (currentState.name === transition.from && transition.character === char) {
                     // if we have a valid state we update the network for highlighting it
-                    nextState = Number(edge.to);
-                    this.highlightStateAndEdge(nextState);
+                    const next = this.model.getStateByName(transition.to);
+                    nextState = next !== null ? this.model.states.indexOf(next) : -1;
+                    this.highlightStateAndEdge(possibleState);
                     break;
                 }
             }
@@ -204,18 +204,49 @@ export class DFASimulator {
     /**
      * Highlights the current state and edge if given
      */
-    protected highlightStateAndEdge(state: number) {
+    protected highlightStateAndEdge(state: State) {
         this.resetNodesColors();
-        this.network?.updateClusteredNode(state, { color: 'yellow' });
+        this.network?.updateClusteredNode(state.name, { color: 'yellow' });
     }
 
     /**
      * Iterates through all nodes and resetes their colors
      */
     protected resetNodesColors() {
-        for (let i = 0, len = this.nodes.length; i < len; i++) {
-            const color = [0, this.nodes.length - 1].indexOf(i) === 0 ? 'lightgreen' : 'lightblue';
-            this.network?.updateClusteredNode(i, { color });
+        for (let i = 0, len = this.model.states.length; i < len; i++) {
+            const color = this.model.states[i].initial || this.model.states[i].final ? 'lightgreen' : 'lightblue';
+            this.network?.updateClusteredNode(this.model.states[i].name, { color });
         }
+    }
+
+    /**
+     * Returns the list of nodes created based on the model's states
+     */
+    protected getNodes(): Node[] {
+        const nodes: Node[] = [];
+        for (let i = 0, len = this.model.states.length; i < len; i++) {
+            const state = this.model.states[i];
+            nodes.push({
+                id: state.name,
+                label: state.name + (state.initial ? ' (Start)' : state.final ? ' (Final)' : ''),
+                shape: 'ellipse',
+                color: state.initial || state.final ? 'lightgreen' : 'lightblue',
+            });
+        }
+
+        return nodes;
+    }
+
+    /**
+     * Returns the list of edges created based on the model's transition table
+     */
+    protected getEdges(): Edge[] {
+        const edges: Edge[] = [];
+        for (let i = 0, len = this.model.transitions.length; i < len; i++) {
+            const transition = this.model.transitions[i];
+            edges.push({ label: transition.character, from: transition.from, to: transition.to });
+        }
+
+        return edges;
     }
 }
