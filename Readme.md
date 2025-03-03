@@ -1,17 +1,9 @@
-# ACAT - ACE Computational Automata Tool
+# <img src="./public/acat-logo.svg" width="100" align="center"> ACAT - ACE Computational Automata Tool
 
-This is work in progress and this readme will be updated when the time comes.
+The ACAT - ACE Computational Automata Tool implemented by the students of the Automatics, Computers and Electronics Faculty of the University of Craiova.
 
+This tool intends to visually represent the abstract logic behind Automata and Formal Languages.
 
-#### Questions
+This is work in progress so any contribution is much appreciated.
 
-
-### Interfaces
-
-Application:
-1. getModule(name)
-2. getContainer()
-
-CustomElement:
-1. getChildren()
-2. getFirstChild()
+For HOWTO stuff, please follow the readme files inside the src/ directory which will be updated from time to time.
