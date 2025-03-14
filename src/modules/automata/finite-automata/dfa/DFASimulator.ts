@@ -1,4 +1,4 @@
-ï»¿import { Network, DataSet, Node, Edge } from 'vis-network/standalone';
+import { Network, DataSet, Node, Edge } from 'vis-network/standalone';
 import { DFAAutomata } from './DFAAutomata.ts';
 import { DFAMainView } from './views/DFAMainView.ts';
 import { DFAModel, State } from './DFAModel.ts';
@@ -19,6 +19,18 @@ export class DFASimulator {
     // @ts-ignore
     protected currentTimeout: NodeJS.Timeout;
 
+
+    //AICI incep***********************************************************************************
+    /**
+     * Variabile noi pentru modul step-by-step
+     */
+
+    protected stepByStepInput: string = '';
+    protected currentIndex: number = 0;
+    protected stepByStepActive: boolean = false;
+    //AICI term**************************************************************************************
+
+
     /**
      * The constructor receives the Automata instance
      */
@@ -36,7 +48,7 @@ export class DFASimulator {
         // creating the network of states
         const [nodes, edges] = [this.getNodes(), this.getEdges()];
         // setting up some display options for how to render the network
-        const options = { physics: false, edges: { font: { align: 'top' } } };
+        const options = { physics: true, edges: { font: { align: 'top' } } };
         // instantiating the network of states
         this.network = new Network(mainView.getNetworkContainer(), { nodes, edges }, options);
 
@@ -123,78 +135,99 @@ export class DFASimulator {
     };
 
 
-
-
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //**********************************************************************************AICI INCEPE
 
     /**
- * Verifica daca starea curenta este una finala si afiseaza un mesaj corespunzator.
- */
-   /* checkFinalState() {
-        if (!this.model) {
-            console.error("Model is not initialized.");
-            return;
-        }
-
-        const currentState = this.model.states[this.model.currentState];
-        if (this.model.finalStates.includes(currentState)) {
-            this.mainView?.logMessage('Simulation finished: Input accepted.', 'success');
-        } else {  
-            this.mainView?.logMessage('Simulation finished: Input rejected.', 'error');
-        }
-    }
+     * Variabile noi de clas?:
+     *  - stepByStepInput: string (stocheaz? input-ul curent)
+     *  - currentIndex: number (indexul caracterului curent)
+     *  - stepByStepActive: boolean (marcheaz? dac? suntem în modul step-by-step)
+     */
 
     /**
- * Invoked when the user clicks the play step-by-step button for the simulation
- */
-   /* onPlayStepByStepSimulation = () => {
-        if (!this.mainView) {
-            console.error("Main view is not initialized.");
-            return;
-        }
+     * Apelez aceast? func?ie când vreau s? rulez simularea pas-cu-pas.
+     * La fiecare apel procesez un singur caracter din `stepByStepInput`.
+     */
 
-        const input = this.mainView?.getTestInput();
-        if (!input || input.length === 0) {
-            alert('Please type the input for the DFA in the top left box.');
-            return;
-        }
 
-        // Resetare pentru a incepe simularea pas cu pas
-        this.model.currentState = this.model.states.indexOf(this.model.getInitialState());
-        this.mainView?.clearLog();
-        this.mainView?.logMessage('Starting step-by-step simulation for input: ' + input, 'success');
+    onPlayStepByStepSimulation = async () => {
+        // Dac? e prima dat? când ap?s butonul "Step By Step"
+        // sau dac? nu am pornit înc? modul stepByStepActive
+        if (!this.stepByStepActive) {
+            this.stepByStepActive = true;
 
-        let currentIndex = 0;
-
-        const processNextStep = async () => {
-            if (!this.mainView) return;
-
-            if (currentIndex >= input.length) {
-                this.checkFinalState();
+            // Ob?in input-ul din UI
+            this.stepByStepInput = this.mainView!.getTestInput();
+            if (!this.stepByStepInput || this.stepByStepInput.length === 0) {
+                alert('Please type the input for the DFA in the top left box.');
                 return;
             }
 
-            const currentChar = input[currentIndex];
-            this.mainView?.logMessage(`Processing input character: ${currentChar}`);
+            // Golesc consola
+            this.mainView?.clearLog();
 
-            const nextState = await this.transitionFunction(currentChar);
-            if (nextState === -1) {
-                this.mainView?.logMessage('Transition not found. Stopping simulation.', 'error');
-                return;
+            // Marchez începutul simul?rii
+            this.mainView?.logMessage(
+                'Starting step-by-step simulation for the following input: ' + this.stepByStepInput,
+                'success'
+            );
+
+            // Resetez starea DFA la cea ini?ial?
+            this.model.currentState = this.model.states.indexOf(this.model.getInitialState());
+
+            // Eviden?iez starea ini?ial?
+            this.highlightStateAndEdge(this.model.getInitialState());
+
+            // Pornim indexul de la 0
+            this.currentIndex = 0;
+        }
+
+        // Dac? am terminat deja de parcurs tot input-ul, nu mai are rost s? continu?m.
+        if (this.currentIndex >= this.stepByStepInput.length) {
+            this.mainView?.logMessage('No more input to process.', '');
+            return;
+        }
+
+        // Proces?m caracterul curent
+        const currentChar = this.stepByStepInput[this.currentIndex];
+        this.mainView?.logMessage('Processing input character: ' + currentChar);
+
+        // Facem tranzi?ia în DFA
+        const nextState = await this.transitionFunction(currentChar);
+
+        // nextState == -1 înseamn? c? nu exist? nicio tranzi?ie valid?
+        if (nextState === -1) {
+            this.network?.updateClusteredNode(
+                this.model.states[this.model.currentState].name,
+                { color: 'palevioletred' }
+            );
+            this.mainView?.logMessage('Input rejected: ' + this.stepByStepInput, 'error');
+            // Oprim modul step-by-step, dac? vrem
+            this.stepByStepActive = false;
+            return;
+        }
+
+        // Actualiz?m starea curent? ?i o eviden?iem
+        this.model.currentState = nextState;
+        this.highlightStateAndEdge(this.model.states[this.model.currentState]);
+
+        // Increment?m indexul (am procesat un caracter)
+        this.currentIndex++;
+
+        // Dac? am ajuns la finalul ?irului, verific?m dac? e acceptat sau respins
+        if (this.currentIndex === this.stepByStepInput.length) {
+            if (this.model.states[this.model.currentState].final) {
+                this.mainView?.logMessage('Input accepted: ' + this.stepByStepInput, 'success');
+            } else {
+                this.mainView?.logMessage('Input rejected: ' + this.stepByStepInput, 'error');
             }
-
-            this.model.currentState = nextState;
-            currentIndex++;
-        };
-
-        // Adaugam un buton pentru a avansa manual prin simulare
-        this.mainView?.addStepButton(() => processNextStep());
+            // Putem marca faptul c? s-a încheiat simularea step-by-step
+            this.stepByStepActive = false;
+        }
     };
-    *
-
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
+    //***********************************************************************AICI SE TERMINA
 
 
     /**
@@ -220,23 +253,18 @@ export class DFASimulator {
      * Invoked when a new edge has been added
      */
     protected edgeAdded = (edgeData: Edge, callback: (edge: Edge) => void) => {
-        // Accepting the new edge only if forwards to a new state
-        if (edgeData.from !== edgeData.to) {
-            // requesting the character that will validate next state
-            const character = prompt('Enter the transition character:');
-            if (!character) {
-                alert('Aborting because no character was inserted');
-                return;
-            }
-
-            // @ts-ignore
-            this.model.transitions.push({ from: edgeData.from, to: edgeData.to, character });
-
-            edgeData.label = character;
-            callback(edgeData);
-        } else {
-            alert('Self-loops are not allowed!');
+        // requesting the character that will validate next state
+        const character = prompt('Enter the transition character:');
+        if (!character) {
+            alert('Aborting because no character was inserted');
+            return;
         }
+
+        // @ts-ignore
+        this.model.transitions.push({ from: edgeData.from, to: edgeData.to, character });
+
+        edgeData.label = character;
+        callback(edgeData);
     };
 
     /**
