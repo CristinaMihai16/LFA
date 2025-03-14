@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "eslint": "^9.21.0",
     "less": "^4.2.2",
     "prettier": "^3.5.2",
     "typescript": "~5.7.2",

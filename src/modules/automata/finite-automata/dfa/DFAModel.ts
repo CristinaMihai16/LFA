@@ -31,6 +31,18 @@ export class DFAModel {
         return this.states.filter(s => s.initial)[0];
     }
 
+
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    //  Lista starilor finale
+    //public get finalStates(): State[] {
+     //   return this.states.filter(s => s.final);
+   // }
+
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
     /**
      * Returns the current state
      */

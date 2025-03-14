@@ -1,0 +1,17 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\modules",
+    "\\src\\modules\\automata",
+    "\\src\\modules\\automata\\finite-automata",
+    "\\src\\modules\\automata\\finite-automata\\dfa",
+    "\\src\\modules\\automata\\finite-automata\\dfa\\views",
+    "\\src\\modules\\menu",
+    "\\src\\modules\\menu\\app-menu",
+    "\\src\\modules\\menu\\context-menu",
+    "\\src\\modules\\menu\\context-menu\\buttons"
+  ],
+  "SelectedNode": "\\src\\modules\\menu\\context-menu\\buttons\\PauseButton.ts",
+  "PreviewInSolutionExplorer": false
+}

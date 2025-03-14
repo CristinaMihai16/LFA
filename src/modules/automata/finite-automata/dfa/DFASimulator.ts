@@ -1,4 +1,4 @@
-import { Network, DataSet, Node, Edge } from 'vis-network/standalone';
+﻿import { Network, DataSet, Node, Edge } from 'vis-network/standalone';
 import { DFAAutomata } from './DFAAutomata.ts';
 import { DFAMainView } from './views/DFAMainView.ts';
 import { DFAModel, State } from './DFAModel.ts';
@@ -121,6 +121,81 @@ export class DFASimulator {
         // updating colors
         this.resetNodesColors();
     };
+
+
+
+
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    /**
+ * Verifica daca starea curenta este una finala si afiseaza un mesaj corespunzator.
+ */
+   /* checkFinalState() {
+        if (!this.model) {
+            console.error("Model is not initialized.");
+            return;
+        }
+
+        const currentState = this.model.states[this.model.currentState];
+        if (this.model.finalStates.includes(currentState)) {
+            this.mainView?.logMessage('Simulation finished: Input accepted.', 'success');
+        } else {  
+            this.mainView?.logMessage('Simulation finished: Input rejected.', 'error');
+        }
+    }
+
+    /**
+ * Invoked when the user clicks the play step-by-step button for the simulation
+ */
+   /* onPlayStepByStepSimulation = () => {
+        if (!this.mainView) {
+            console.error("Main view is not initialized.");
+            return;
+        }
+
+        const input = this.mainView?.getTestInput();
+        if (!input || input.length === 0) {
+            alert('Please type the input for the DFA in the top left box.');
+            return;
+        }
+
+        // Resetare pentru a incepe simularea pas cu pas
+        this.model.currentState = this.model.states.indexOf(this.model.getInitialState());
+        this.mainView?.clearLog();
+        this.mainView?.logMessage('Starting step-by-step simulation for input: ' + input, 'success');
+
+        let currentIndex = 0;
+
+        const processNextStep = async () => {
+            if (!this.mainView) return;
+
+            if (currentIndex >= input.length) {
+                this.checkFinalState();
+                return;
+            }
+
+            const currentChar = input[currentIndex];
+            this.mainView?.logMessage(`Processing input character: ${currentChar}`);
+
+            const nextState = await this.transitionFunction(currentChar);
+            if (nextState === -1) {
+                this.mainView?.logMessage('Transition not found. Stopping simulation.', 'error');
+                return;
+            }
+
+            this.model.currentState = nextState;
+            currentIndex++;
+        };
+
+        // Adaugam un buton pentru a avansa manual prin simulare
+        this.mainView?.addStepButton(() => processNextStep());
+    };
+    *
+
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
 
     /**
      * Handler that will be invoked when a new node will be added

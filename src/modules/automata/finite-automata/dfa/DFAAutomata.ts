@@ -4,6 +4,7 @@ import { DefaultToolbar } from '../../../menu/context-menu/DefaultToolbar.ts';
 import { PlayButton } from '../../../menu/context-menu/buttons/PlayButton.ts';
 import { PauseButton } from '../../../menu/context-menu/buttons/PauseButton.ts';
 import { RefreshButton } from '../../../menu/context-menu/buttons/RefreshButton.ts';
+import { PlayStepByStepButton } from '../../../menu/context-menu/buttons/PlayStepByStepButton.ts'; // si aici am modificat !!!!!!!
 import { DFASimulator } from './DFASimulator.ts';
 import { DFAMainView } from './views/DFAMainView.ts';
 
@@ -25,9 +26,10 @@ export class DFAAutomata implements Automata {
     /**
      * The constructor for the Deterministic Finite Automata
      */
-    constructor() {
+    constructor() {  // am adaugat butonul aici !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         this.toolbar = new DefaultToolbar({
-            buttons: [new PlayButton(this.simulator.onPlaySimulation), new PauseButton(this.simulator.onPauseSimulation), new RefreshButton(this.onRefreshSimulation)],
+            buttons: [new PlayButton(this.simulator.onPlaySimulation), new PauseButton(this.simulator.onPauseSimulation),
+            new PlayStepByStepButton(this.simulator.onPlayStepByStepSimulation), new RefreshButton(this.onRefreshSimulation)],
         });
     }
 

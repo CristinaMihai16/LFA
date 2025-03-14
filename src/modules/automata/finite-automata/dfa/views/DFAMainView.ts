@@ -1,4 +1,4 @@
-import '../less/dfa-main-view.less';
+﻿import '../less/dfa-main-view.less';
 import { CustomElement } from '../../../../../core/CustomElement.ts';
 import { LeftColumn } from './LeftColumn.ts';
 import { RightColumn } from './RightColumn.ts';
@@ -37,6 +37,23 @@ export class DFAMainView extends CustomElement {
     clearLog() {
         (<RightColumn>this.children[1]).getLogEntry().innerHTML = '';
     }
+
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    /**
+ * Adds a button to allow step-by-step simulation
+ */
+    addStepButton(callback: () => void) {
+        const button = document.createElement('button');
+        button.innerText = 'Next Step';
+        button.addEventListener('click', callback);
+        button.classList.add('step-button');
+
+        // Adăugăm butonul în interfață, într-un loc potrivit (de exemplu, în partea dreaptă)
+        const rightCol = <RightColumn>this.children[1];
+        rightCol.appendChild(button);
+    }
+
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     /**
      * Shows a message in the log entry
